@@ -8,7 +8,7 @@ import numpy as np
 import os
 import pickle
 
-model_dir = '/Users/sahailjaffary//Documents/AppDevelopment/web/drakeai/model_files/'
+model_dir = 'model/'
 # Tokenizers
 tokenizer_5k = 'tokenizer_5k.pickle'
 tokenizer_full = 'tokenizer_full.pickle'
@@ -56,8 +56,7 @@ def generate_stochastic_sampling(seed_text, next_words, temperature, model_name,
             if index == next_index:
                 output_word = word
                 break
-        if '\n' in output_word:  # For html
-            print('Word with new line: ', output_word)
+        if output_word is '\n':  # For html
             seed_text += '<br>'
         else:
             if prev_word is '\n':

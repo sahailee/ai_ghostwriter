@@ -1,0 +1,45 @@
+.carousel-caption {
+    background-color: rgba(0, 0, 0, .7);
+    color:#c5b358;
+    bottom:50%;
+}
+
+.form {
+    margin-top: 5%;
+}
+
+.input-label {
+    font-family: 'Roboto Slab', serif;
+    font-size: 100%;
+}
+
+.text-box {
+    width: 100%;
+    height: 100px;
+}
+
+.slider {
+    width: 75%;
+}
+
+.slider-value {
+    width: 25%;
+}
+
+.subtext {
+    font-size: 80%;
+}
+
+.genButton {
+    background-color: black;
+    border: none;
+    color: #c5b358;
+    padding: 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-family: 'Roboto Slab', serif;
+    font-size: 25px;
+    border-radius: 12px;
+    text-transform: uppercase;
+}
