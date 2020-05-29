@@ -67,6 +67,19 @@ def generate_stochastic_sampling(seed_text, next_words, temperature, model_name,
     return seed_text
 
 
+def generate_next_word(seed_text, temperature, model, tokenizer, input_sequences):
+    max_sequence_len = max([len(x) for x in input_sequences])
+    token_list = tokenizer.texts_to_sequences([seed_text])[0]
+    token_list = pad_sequences([token_list], maxlen=max_sequence_len - 1, padding='pre')
+    predicted = model.predict(token_list)[0]
+    next_index = sample(predicted, temperature)
+    for word, index in tokenizer.word_index.items():
+        if index == next_index:
+            output_word = word
+            break
+    return output_word
+
+
 def load_tokenizer(name):
     # load tokenizer
     with open(os.path.join(model_dir, name), 'rb') as handle:

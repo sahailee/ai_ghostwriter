@@ -16,11 +16,19 @@
       <body>
       <div class="container-fluid">
           <div class="row">
-            <div class="col-lg-12">
+            <div class="col-sm-12 col-lg-12">
                 <div class="carousel-caption text-center">
-                    <h1 class="display-4">AI DRAKE</h1>
-                    <p>Generate lyrics based on a deep learning network that was trained over
-                    Drake lyrics.</p>
+                    <div class="row">
+                        <div class="col-12">
+                            <h1 class="display-4">AI DRAKE</h1>
+                        </div>
+                    </div>
+                    <div class="row d-none d-md-block">
+                        <div class="col-lg-12">
+                            <p>Generate lyrics based on a deep learning network that was trained over
+                            Drake lyrics.</p>
+                        </div>
+                    </div>
                   </div>
                 {% block content %}
                 <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
@@ -43,16 +51,22 @@
         <form method="POST" id="user-input">
             <div class="container">
                 <div class="row">
-                    <div class="col-2 input-label">Seed Text</div>
-                    <div class="col-10"><textarea class="input-box" name="seed"
+                    <div class="col-sm-6 col-md-4 col-lg-2 input-label">Seed Text</div>
+                    <div class="col-sm-6 col-md-8 col-lg-10"><textarea class="seed-text-box" name="seed"
                                                   maxlength="1000" cols="40" rows="5"></textarea></div>
                 </div>
                 <div class="row">
-                    <div class="col-2 input-label">Number of Words to Generate</div>
-                    <div class="col-3"><input type="number" name="count" max="1000" min="0" style="width: 25%;"></div>
-                    <div class="col-2"><p class="input-label">Temperature</p><p class="subtext">High Temp = More Stochastic<br>
-                        Low Temp = More Predictable</p></div>
-                    <div class="col-5">
+                    <div class="col-lg-2 input-label">Number of Words to Generate</div>
+                    <div class="col-lg-3"><input type="number" name="count" max="1000" min="0" style="width: 25%;"></div>
+                    <div class="col-lg-2">
+                        <row>
+                            <div class="col-12 input-label">Temperature</div>
+                        </row>
+                        <row>
+                            <div class="col-12 subtext">High Temp = More Randomness<br>Low Temp = More Predictable</div>
+                        </row>
+                    </div>
+                    <div class="col-lg-5">
                         <div class="slidecontainer">
                             <input type="range" min=".1" max="2" step= ".05" value="1" class="slider"
                                    id="myRange" oninput="sliderValue.value=myRange.value">
@@ -63,7 +77,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-12 text-center"><button class="genButton" type="submit">Generate</button></div>
+                    <div class="col-lg-12 text-center"><button class="genButton" type="submit">Generate</button></div>
                 </div>
             </div>
         </form>
