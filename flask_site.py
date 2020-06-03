@@ -1,33 +1,89 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify, make_response
 from lyric_generation import generate_stochastic_sampling
+from lyric_gpt_generation import generate_lyrics_with_gpt
+import random
 
 app = Flask(__name__)
 
+artist_map = {
+    0: 'Random',
+    1: 'Drake',
+    2: 'Frank Ocean',
+    3: 'Future',
+    4: 'JAY Z',
+    5: 'Kanye West',
+    6: 'Kendrick Lamar',
+    7: 'Playboi Carti',
+    8: 'Rihanna',
+    9: 'The Weeknd',
+    10: 'Travis Scott'
+}
 
-@app.route("/", methods=["POST", "GET"])
+title_top = 'gpt2/all_title_top/checkpoint'
+title_bot = 'gpt2/all_title_bottom/checkpoint'
+
+
+@app.route("/", methods=["GET"])
 def index():
-    # if request.method == "POST":
-    # return render_template('index.html', generated_text=output)
     return render_template('index.html')
 
 
-@app.route("/_background")
+@app.route("/background", methods=["POST"])
 def generate_lyrics():
-    seed_text = request.args.get('seed', '', type=str)
-    next_words = request.args.get('words', 0, type=int)
-    if seed_text is '' or next_words is '':
-        # Dont know what to do here
-        return
-    # next_words = int(next_words)
-    temperature = request.args.get('temp', 1.0, type=float)
-    print(temperature)
-    model_name = 'model_f.h5'
-    tokenizer_name = 'tokenizer_verse_newlines_1.pickle'
-    input_seq = 'input_sequence_verses_5.pickle'
-    output = generate_stochastic_sampling(seed_text, next_words, temperature, model_name, tokenizer_name, input_seq)
-    print(output)
-    print('\n' in output)
-    return jsonify(result=output)
+    req = request.get_json()
+    is_gpt = req['gpt']
+    is_gpt = int(is_gpt)
+    seed_text = req['seed']
+    next_words = req['count']
+    temperature = req['temp']
+    temperature = float(temperature)
+    if is_gpt is 1:
+        title = req['title']
+        artist = int(req['artist'])
+        topk = int(req['topk'])
+        if artist is 0:
+            artist = random.randint(1, 11)
+        if title is '' and seed_text is '':
+            model_name = title_top
+            seed_text = 'Song: Artist: ' + artist_map[artist] + ' Title: '
+        elif title is '':
+            model_name = title_bot
+            seed_text = 'Song: Artist: ' + artist_map[artist] + '\n' + seed_text
+        else:
+            model_name = title_top
+            seed_text = 'Song: Artist: ' + artist_map[artist] + 'Title: ' + title + '\n'
+        if next_words is '':
+            next_words = 0
+        else:
+            next_words = int(next_words)
+        output = generate_lyrics_with_gpt(seed_text=seed_text, next_words=next_words, temperature=temperature,
+                                          model_name=model_name, top_k=topk)
+        end_of_first = output.find('\n')
+        print(output)
+        if model_name is title_top:
+            title = output[output.find('Title: ') + 7:end_of_first]
+            output = output[end_of_first + 1:]
+        else:
+            end_of_lyric = output.find('Title: ')
+            if end_of_lyric is -1:
+                title = 'Generated Lyrics'
+            else:
+                title = output[end_of_lyric + 7:]
+            output = output[end_of_first+1:end_of_lyric]
+        artist = 'By ' + artist_map[artist]
+    else:
+        if next_words is '' or next_words is '0':
+            output = ''
+            return make_response(jsonify({"lyrics": output}), 200)
+        next_words = int(next_words)
+        model_name = 'model_f.h5'
+        tokenizer_name = 'tokenizer_verse_newlines_1.pickle'
+        input_seq = 'input_sequence_verses_5.pickle'
+        output = generate_stochastic_sampling(seed_text, next_words, temperature, model_name, tokenizer_name, input_seq)
+        title = 'Generated Lyrics'
+        artist = 'By AI Drake'
+    res = make_response(jsonify({"lyrics": output, "title": title, "artist": artist}), 200)
+    return res
 
 
 if __name__ == "__main__":

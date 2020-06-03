@@ -6,6 +6,7 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.models import load_model
 import numpy as np
 import os
+import string
 import pickle
 
 model_dir = 'model/'
@@ -41,6 +42,8 @@ def sample(preds, temperature=1.0):
 
 
 def generate_stochastic_sampling(seed_text, next_words, temperature, model_name, tokenizer_name, input_seq):
+    seed_text = seed_text.translate(str.maketrans('', '', string.punctuation))
+    seed_text = seed_text.lower()
     tokenizer = load_tokenizer(tokenizer_name)
     input_sequences = load_tokenizer(input_seq)
     max_sequence_len = max([len(x) for x in input_sequences])
@@ -56,28 +59,12 @@ def generate_stochastic_sampling(seed_text, next_words, temperature, model_name,
             if index == next_index:
                 output_word = word
                 break
-        if output_word is '\n':  # For html
-            seed_text += '<br>'
+        if prev_word is '\n':
+            seed_text += output_word
         else:
-            if prev_word is '\n':
-                seed_text += output_word
-            else:
-                seed_text += " " + output_word
+            seed_text += " " + output_word
         prev_word = output_word
     return seed_text
-
-
-def generate_next_word(seed_text, temperature, model, tokenizer, input_sequences):
-    max_sequence_len = max([len(x) for x in input_sequences])
-    token_list = tokenizer.texts_to_sequences([seed_text])[0]
-    token_list = pad_sequences([token_list], maxlen=max_sequence_len - 1, padding='pre')
-    predicted = model.predict(token_list)[0]
-    next_index = sample(predicted, temperature)
-    for word, index in tokenizer.word_index.items():
-        if index == next_index:
-            output_word = word
-            break
-    return output_word
 
 
 def load_tokenizer(name):

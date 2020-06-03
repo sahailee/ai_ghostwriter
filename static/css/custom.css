@@ -4,8 +4,8 @@
     bottom:50%;
 }
 
-form {
-    margin-top: 5%;
+.form-group {
+    margin-top: 2%;
 }
 
 .input-label {
@@ -15,15 +15,10 @@ form {
 
 .seed-text-box {
     width: 100%;
-    height: 100px;
 }
 
 .slider {
-    width: 75%;
-}
-
-.slider-value {
-    width: 25%;
+    width: 100%;
 }
 
 .subtext {
@@ -33,14 +28,34 @@ form {
 .genButton {
     margin-top: 5%;
     background-color: black;
-    border: none;
     color: #c5b358;
-    padding: 15px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
     font-family: 'Roboto Slab', serif;
-    font-size: 25px;
-    border-radius: 12px;
+    font-size: 2rem;
     text-transform: uppercase;
+}
+
+.genButton:hover {
+    color: #c5b358;
+    background-color: black;
+    border-color: #c5b358;
+}
+
+.spinner-size {
+    width: 2rem;
+    height: 2rem;
+}
+
+.generated-lyrics {
+    line-height: 1.7em;
+    padding: .2em 0;
+    text-decoration: none;
+    font-size: 1.125rem;
+    margin-top: 1.5rem;
+    font-weight: 100;
+    font-family: Programme,sans-serif;
+}
+
+.warning {
+    color: red;
+    margin-top: 1rem;
 }

@@ -4,7 +4,7 @@
         <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
               integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
@@ -33,14 +33,14 @@
                 {% block content %}
                 <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
                   <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img src="{{ url_for('static', filename='images/stylized-image.jpg')}}" class="d-block w-100" alt="...">
+                    <div class="carousel-item active" data-interval="10000">
+                        <img src="{{ url_for('static', filename='images/stylized-image.jpg')}}" class="d-block w-100 img-fluid" alt="...">
                     </div>
-                    <div class="carousel-item">
-                      <img src="{{ url_for('static', filename='images/stylized-image-2.jpg')}}" class="d-block w-100" alt="...">
+                    <div class="carousel-item" data-interval="10000">
+                      <img src="{{ url_for('static', filename='images/stylized-image-2.jpg')}}" class="d-block w-100 img-fluid" alt="...">
                     </div>
-                    <div class="carousel-item">
-                      <img src="{{ url_for('static', filename='images/stylized-image-3.jpg')}}" class="d-block w-100" alt="...">
+                    <div class="carousel-item" data-interval="10000">
+                      <img src="{{ url_for('static', filename='images/stylized-image-3.jpg')}}" class="d-block w-100 img-fluid" alt="...">
                     </div>
                   </div>
                 </div>
@@ -48,49 +48,159 @@
             </div>
         </div>
       </div>
-        <form method="POST" id="user-input">
+      <div class="container">
+          <div class="row">
+              <div class="col">
+                  <h1 class="display-3">Model Information</h1>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col">
+                  <h1 class="display-4 text-muted">Simple Model</h1>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col">
+                  <p class="lead">
+                      The Simple Model is a deep learning model
+                      with an Embedding layer and a single LSTM layer. This model was trained over a corpus of Drake
+                      lyrics, therefore it can only generate lyrics in the style of Drake.
+                      The generated text can be amusing, but it is very clear that the model has no understanding
+                      of lyrical structure and long term meaning. However, due to its simplistic nature, it can generate
+                      text rather quickly.
+                  </p>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col">
+                  <h1 class="display-4 text-muted">GPT-2 Model</h1>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col">
+                  <p class="lead">
+                      The GPT2 is trained over a corpus of multiple artist' lyrics and uses Open AI's GPT-2 model. This
+                      model is much more sophisticated as it has millions of parameters and pre-trained on essentially
+                      the entire internet. Open AI's model generates better lyrics and is able to produce structure as
+                      well by including choruses and signifying verses. This model takes longer to generate text, but
+                      its quality is much better and it can generate lyrics in the style of various artists.
+                  </p>
+              </div>
+          </div>
+      </div>
+        <div class="form-group">
             <div class="container">
                 <div class="row">
-                    <div class="col-sm-6 col-md-4 col-lg-2 input-label">Seed Text</div>
-                    <div class="col-sm-6 col-md-8 col-lg-10"><textarea class="seed-text-box" name="seed"
-                                                  maxlength="1000" cols="40" rows="5"></textarea></div>
+                    <div class="col">
+                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                          <label class="btn btn-secondary active">
+                            <input type="radio" name="options" id="gpt" onclick="update_form(this.id)" checked> GPT-2
+                          </label>
+                          <label class="btn btn-secondary">
+                            <input type="radio" name="options" id="simple" onclick="update_form(this.id)"> Simple
+                          </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="gptExtraOptions">
+                    <div class="col-lg-4">
+                        <label class="input-label" for="artist">Artist</label>
+                          <select class="custom-select" id="artist">
+                            <option selected value="0">Random</option>
+                            <option value="1">Drake</option>
+                            <option value="2">Frank Ocean</option>
+                            <option value="3">Future</option>
+                            <option value="4">JAY-Z</option>
+                            <option value="5">Kanye West</option>
+                            <option value="6">Kendrick Lamar</option>
+                            <option value="7">Playboi Carti</option>
+                            <option value="8">Rihanna</option>
+                            <option value="9">The Weeknd</option>
+                            <option value="10">Travis Scott</option>
+                          </select>
+                    </div>
+                    <div class="col-lg-4">
+                        <label class="input-label" for="title">Title</label>
+                        <input class="form-control" type="text" placeholder="Leave blank to generate a title." id="title">
+                    </div>
+                    <div class="col-lg-4">
+                        <label class="input-label" for="topk">Top K</label>
+                        <input class="form-control" type="number" id="topk" aria-describedby="topkHelp" min="0" max="100" value="0">
+                        <small id="topkHelp" class="form-text text-muted">Only consider top K possibilities for a word. 0 to disable.</small>
+                    </div>
                 </div>
                 <div class="row">
+                    <div class="col-sm-6 col-md-4 col-lg-2 input-label">Seed Text</div>
+                    <div class="col-sm-6 col-md-8 col-lg-10">
+                        <button id="infoPopover" type="button" class="btn float-right" data-container="body" data-toggle="popover"
+                                data-placement="top"
+                                data-html = "true"
+                                data-content="The seed text may be left blank. For better results try marking choruses and verses.
+                                <br />For Example:<br />
+                                [Verse 1]<br />
+                                My first line<br />
+                                Wow, second line<br />
+                                Third line...<br />
+                                <br />
+                                Available tags:<br />
+                                [Intro], [Verse #], [Chorus], [Pre-Chorus], [Post-Chorus], [Bridge], [Interlude],
+                                [Prelude]<br />
+                                You may also specify which artist should be singing that section by adding
+                                a colon followed by the artist name.
+                                <br />For example:<br />
+                                [Intro: Artist Name]">
+                            <svg class="bi bi-info-circle-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                              <path fill-rule="evenodd" d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM8 5.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+                            </svg>
+                        </button>
+                        <textarea class="form-control seed-text-box" id="seed"
+                                                  maxlength="1000" cols="40" rows="5"></textarea></div>
+                </div>
+                <div class="row" style="margin-top:2%;">
                     <div class="col-lg-2 input-label">Number of Words to Generate</div>
-                    <div class="col-lg-3"><input type="number" name="count" max="1000" min="0" style="width: 25%;"></div>
+                    <div class="col-lg-3"><input class="form-control" type="number" id="count" max="1000" min="0"
+                    placeholder="0 will generate entire song"></div>
                     <div class="col-lg-2">
                         <row>
-                            <div class="col-12 input-label">Temperature</div>
-                        </row>
-                        <row>
-                            <div class="col-12 subtext">High Temp = More Randomness<br>Low Temp = More Predictable</div>
+                            <div class="col-lg-12 input-label">Temperature</div>
                         </row>
                     </div>
                     <div class="col-lg-5">
-                        <div class="slidecontainer">
-                            <input type="range" min=".1" max="2" step= ".05" value="1" class="slider"
+                        <input type="range" min=".1" max="2" step= ".05" value="1" class="slider"
                                    id="myRange" oninput="sliderValue.value=myRange.value">
-                            <span class="slider-value"><input id="sliderValue" type="number" value="1"
-                                                              min=".1" max="2" step= ".05" style="width: 15%;"
-                                                              oninput="myRange.value=sliderValue.value" name="temp"></span>
-                          </div>
+                        <input id="sliderValue" type="number" value="1"
+                                                              min=".1" max="2" step= ".05"
+                                                              oninput="myRange.value=sliderValue.value" name="temp"
+                                                                class="form-control"
+                                                                aria-describedby="tempHelp">
+                        <small id="tempHelp" class="form-text text-muted">High Temp = More Creativity/Randomness
+                            <br>Low Temp = More Predictable/Repetitive</small>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-12 text-center"><button class="genButton" type="submit">Generate</button></div>
+                    <div class="col-lg-12 text-center">
+                        <p class="lead warning">Warning: The generated text may contain offensive language.</p>
+                        <button class="btn genButton" type="button" onclick="generate_lyrics()" id="gen">
+                            Generate
+                        </button>
+                    </div>
                 </div>
             </div>
-        </form>
-      <script type="text/javascript" src="{{ url_for('static', filename='js/actions.js')}}"></script>
+        </div>
         <div class="container">
             <div class="row">
-                <div class="col">Generated Text:</div>
+                <div class="col">
+                    <h2 id="generated-title"></h2>
+                </div>
             </div>
             <div class="row">
                 <div class="col">
-                    {% autoescape false %}
-                    <p>{{ generated_text }}</p>
-                    {% endautoescape %}
+                    <h4 id="generated-artist"></h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <p class="generated-lyrics" id="lyrics"></p>
                 </div>
             </div>
         </div>
@@ -105,5 +215,11 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
             integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
             crossorigin="anonymous"></script>
+      <script>
+            $(document).ready(function(){
+              $('[data-toggle="popover"]').popover();
+            });
+            </script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/actions.js')}}"></script>
       </body>
 </html>
