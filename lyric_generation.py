@@ -9,27 +9,7 @@ import os
 import string
 import pickle
 
-model_dir = 'model/'
-# Tokenizers
-tokenizer_5k = 'tokenizer_5k.pickle'
-tokenizer_full = 'tokenizer_full.pickle'
-tokenizer_full_newlines = 'tokenizer_full_newlines.pickle'
-tokenizer_5k_newlines = 'tokenizer_5k_newlines.pickle'
-tokenizer_songs_newlines = 'tokenizer_songs_newlines.pickle'
-tokenizer_songs_newlines_100 = 'tokenizer_songs_newlines_100.pickle'
-tokenizer_verse_1 = 'tokenizer_verse_newlines_1.pickle'  # Goes 5 verses each element with new lines
-# Models
-model_a = 'model_a.h5'  # Single LSTM(100)
-model_b = 'model_b.h5'  # LSTM(150) on top of LSTM(250)
-model_c = 'model_c.h5'  # LSTM(250) using songs not line by line
-model_d = 'model_d.h5'  # embeddings(400) LSTM(250) using corpus line by line with no new lines
-model_e = 'model_e.h5'  # LSTM (250) but go through corpus by 5 verses each time
-model_f = 'model_f.h5'  # LSTM(400) verse approach
-
-# Input sequences
-input_sequence_verses_5 = 'input_sequence_verses_5.pickle'
-input_sequence_songs = 'input_sequence_songs.pickle'
-input_sequence_full = 'input_sequence_full.pickle'
+model_dir = 'model'
 
 
 def sample(preds, temperature=1.0):
@@ -41,7 +21,9 @@ def sample(preds, temperature=1.0):
     return np.argmax(probas)
 
 
-def generate_stochastic_sampling(seed_text, next_words, temperature, model_name, tokenizer_name, input_seq):
+def generate_stochastic_sampling(seed_text, next_words, temperature,
+                                 model_name='model_f.h5', tokenizer_name='tokenizer_verse_newlines_1.pickle',
+                                 input_seq='input_sequence_verses_5.pickle'):
     seed_text = seed_text.translate(str.maketrans('', '', string.punctuation))
     seed_text = seed_text.lower()
     tokenizer = load_tokenizer(tokenizer_name)

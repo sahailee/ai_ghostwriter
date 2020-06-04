@@ -59,7 +59,6 @@ def generate_lyrics():
         output = generate_lyrics_with_gpt(seed_text=seed_text, next_words=next_words, temperature=temperature,
                                           model_name=model_name, top_k=topk)
         end_of_first = output.find('\n')
-        print(output)
         if model_name is title_top:
             title = output[output.find('Title: ') + 7:end_of_first]
             output = output[end_of_first + 1:]
@@ -70,18 +69,15 @@ def generate_lyrics():
             else:
                 title = output[end_of_lyric + 7:]
             output = output[end_of_first+1:end_of_lyric]
-        artist = 'By ' + artist_map[artist]
+        artist = 'By AI in the style of ' + artist_map[artist]
     else:
+        title = 'Generated Lyrics'
+        artist = 'By AI in the style of Drake'
         if next_words is '' or next_words is '0':
             output = ''
-            return make_response(jsonify({"lyrics": output}), 200)
+            return make_response(jsonify({"lyrics": output, "title": title, "artist": artist}), 200)
         next_words = int(next_words)
-        model_name = 'model_f.h5'
-        tokenizer_name = 'tokenizer_verse_newlines_1.pickle'
-        input_seq = 'input_sequence_verses_5.pickle'
-        output = generate_stochastic_sampling(seed_text, next_words, temperature, model_name, tokenizer_name, input_seq)
-        title = 'Generated Lyrics'
-        artist = 'By AI Drake'
+        output = generate_stochastic_sampling(seed_text, next_words, temperature)
     res = make_response(jsonify({"lyrics": output, "title": title, "artist": artist}), 200)
     return res
 
