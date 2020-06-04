@@ -69,10 +69,10 @@ def generate_lyrics():
             else:
                 title = output[end_of_lyric + 7:]
             output = output[end_of_first+1:end_of_lyric]
-        artist = 'By AI in the style of ' + artist_map[artist]
+        artist = 'By AI GhostWriter in the style of ' + artist_map[artist]
     else:
         title = 'Generated Lyrics'
-        artist = 'By AI in the style of Drake'
+        artist = 'By AI GhostWriter in the style of Drake'
         if next_words is '' or next_words is '0':
             output = ''
             return make_response(jsonify({"lyrics": output, "title": title, "artist": artist}), 200)
