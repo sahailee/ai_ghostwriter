@@ -13,7 +13,7 @@ because of the high probality of a new line character. I wanted the model to kno
 have a new line character but not as its own word. This does limit what the model can generate, but it was the best I could do given
 the size of my corpus, the nature of hip-hop lyrics, and the amount of time I was willing to allow the models to train for.
 
-The GPT-2 model is able to do all the things I dreamed and goals I had in mind for my model. Its able to mark choruses and verses, and
+The GPT-2 model is able to do all the things I dreamed and goals I had in mind for my model. It is able to mark choruses and verses, and
 knows when it wants to end a line of the lyrics. This model is amazing and I don't think I could make a model that would come close to
 how well the gpt-2 model performs by myself.  I will still continue to experiment with my simple model and try to improve it into a more
 complex model.
