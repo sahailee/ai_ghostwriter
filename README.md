@@ -15,4 +15,5 @@ the size of my corpus, the nature of hip-hop lyrics, and the amount of time I wa
 
 The GPT-2 model is able to do all the things I dreamed and goals I had in mind for my model. Its able to mark choruses and verses, and
 knows when it wants to end a line of the lyrics. This model is amazing and I don't think I could make a model that would come close to
-how well the gpt-2 model performs by myself.  I will still continue to experiment with models and try to improve it.
+how well the gpt-2 model performs by myself.  I will still continue to experiment with my simple model and try to improve it into a more
+complex model.
