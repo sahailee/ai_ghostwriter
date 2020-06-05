@@ -41,7 +41,7 @@ def generate_stochastic_sampling(seed_text, next_words, temperature,
             if index == next_index:
                 output_word = word
                 break
-        if prev_word is '\n':
+        if prev_word == '\n':
             seed_text += output_word
         else:
             seed_text += " " + output_word

@@ -37,49 +37,50 @@ def generate_lyrics():
     next_words = req['count']
     temperature = req['temp']
     temperature = float(temperature)
-    if is_gpt is 1:
+    if is_gpt == 1:
         title = req['title']
         artist = int(req['artist'])
         topk = int(req['topk'])
-        if artist is 0:
+        if artist == 0:
             artist = random.randint(1, 11)
-        if title is '' and seed_text is '':
+        if title == '' and seed_text == '':
             model_name = title_top
             seed_text = 'Song: Artist: ' + artist_map[artist] + ' Title: '
-        elif title is '':
+        elif title == '':
             model_name = title_bot
             seed_text = 'Song: Artist: ' + artist_map[artist] + '\n' + seed_text
         else:
             model_name = title_top
             seed_text = 'Song: Artist: ' + artist_map[artist] + 'Title: ' + title + '\n'
-        if next_words is '':
+        if next_words == '':
             next_words = 0
         else:
             next_words = int(next_words)
         output = generate_lyrics_with_gpt(seed_text=seed_text, next_words=next_words, temperature=temperature,
                                           model_name=model_name, top_k=topk)
         end_of_first = output.find('\n')
-        if model_name is title_top:
+        if model_name == title_top:
             title = output[output.find('Title: ') + 7:end_of_first]
             output = output[end_of_first + 1:]
         else:
             end_of_lyric = output.find('Title: ')
-            if end_of_lyric is -1:
+            if end_of_lyric == -1:
                 title = 'Generated Lyrics'
             else:
                 title = output[end_of_lyric + 7:]
             output = output[end_of_first+1:end_of_lyric]
         artist = 'By AI GhostWriter in the style of ' + artist_map[artist]
+        title = title.strip()
+        return make_response(jsonify({"lyrics": output, "title": title, "artist": artist}), 200)
     else:
         title = 'Generated Lyrics'
         artist = 'By AI GhostWriter in the style of Drake'
-        if next_words is '' or next_words is '0':
+        if next_words == '' or next_words == '0':
             output = ''
             return make_response(jsonify({"lyrics": output, "title": title, "artist": artist}), 200)
         next_words = int(next_words)
         output = generate_stochastic_sampling(seed_text, next_words, temperature)
-    res = make_response(jsonify({"lyrics": output, "title": title, "artist": artist}), 200)
-    return res
+        return make_response(jsonify({"lyrics": output, "title": title, "artist": artist}), 200)
 
 
 if __name__ == "__main__":
