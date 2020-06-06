@@ -89,4 +89,8 @@ def generate_lyrics():
 
 
 if __name__ == "__main__":
+<<<<<<< HEAD
     app.run(debug=False, host='127.0.0.1', port=8080)
+=======
+    app.run(host="0.0.0.0", port=5000, debug=False)
+>>>>>>> 0961304d50803094da38b9f1ab7aa287b12b57b7
