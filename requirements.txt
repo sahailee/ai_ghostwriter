@@ -1,2 +1,4 @@
-tensorflow==1.15.0
+Flask==1.1.2
+gunicorn==20.0.4
+tensorflow==1.15.2
 gpt-2-simple==0.7.1

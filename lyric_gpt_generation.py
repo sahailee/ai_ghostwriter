@@ -4,7 +4,7 @@ import tensorflow as tf
 
 def generate_lyrics_with_gpt(seed_text="Song:", next_words=0, temperature=1, model_name="", top_k=0, truncate='\nSong',
                              include_prefix=False):
-    tf.reset_default_graph()
+    tf.compat.v1.reset_default_graph()
     sess = gpt2.start_tf_sess()
     gpt2.load_gpt2(sess, checkpoint_dir=model_name)
     if next_words == 0:
