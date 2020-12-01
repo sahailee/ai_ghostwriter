@@ -1,7 +1,7 @@
 # ai_ghostwriter
 Generate lyrics with a model trained on a famous artist lyrics
 
-This is the code of the webapp, url will be placed here.
+This is the code of the webapp, www.aighostwriter.com.
 
 In order to make this I used Flask to run the backend and generate text from the machine learning models.
 
