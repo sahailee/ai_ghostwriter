@@ -50,20 +50,25 @@ def generate_lyrics():
         elif title == '':
             model_name = title_top  # would be title bottom but...space issues
             seed_text_for_title = 'Song: Artist: ' + artist_map[artist] + ' Title: '
-            gen_title = generate_lyrics_with_gpt(seed_text=seed_text_for_title, next_words=5, truncate='\n', include_prefix=False,
+            gen_title = generate_lyrics_with_gpt(seed_text=seed_text_for_title, next_words=5, truncate='\n',
                                                  temperature=temperature, model_name=model_name, top_k=topk)
             gen_title = gen_title.strip()
-            seed_text = 'Song: Artist: ' + artist_map[artist] + ' Title: ' + gen_title + '\n' + seed_text
+            seed_text = gen_title + '\n' + seed_text + '\n'
+        elif seed_text == '':
+            model_name = title_top
+            seed_text = 'Song: Artist: ' + artist_map[artist] + ' Title: ' + title + '\n'
         else:
             model_name = title_top
-            seed_text = 'Song: Artist: ' + artist_map[artist] + ' Title: ' + title + '\n' + seed_text
+            seed_text = 'Song: Artist: ' + artist_map[artist] + ' Title: ' + title + '\n' + seed_text + '\n'
         if next_words == '':
             next_words = 0
         else:
             next_words = int(next_words)
+        print(seed_text)
         output = generate_lyrics_with_gpt(seed_text=seed_text, next_words=next_words, temperature=temperature,
                                           model_name=model_name, top_k=topk)
         end_of_first = output.find('\n')
+        print(output)
         if model_name == title_top:
             title = output[output.find('Title: ') + 7:end_of_first]
             output = output[end_of_first + 1:]
